@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+    vote demo
+{% endblock %}
+
+{% block extra_head %}
+    <script type="text/javascript">
+        function avote(id, vote, username) {
+            if (username == 'AnonymousUser'){
+                url = '/openid/login/?next=/vote/';
+                window.location.href=url;
+            }else{
+                $.post('/vote/' + id + '/' + vote, function(data){
+                $("#vote").html(data);
+                });
+            }
+            
+        }
+        function update_info(){
+            $(document).ready(function() {
+                $.post('/vote/', function(data){
+                    $("#vote").html(data);
+                });
+            });            
+        }
+        // setInterval('update_info()',5000);
+    </script>
+    <script src="/static/js/ajaxpost.js"></script>
+{% endblock %}
+
+{% block header %}
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/vote/">vote demo</a>
+            <ul class="nav pull-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {{ user }}
+                        <b class="caret"></b>
+                    </a>               
+                    <ul class="dropdown-menu">
+                        <li><a href="/accounts/logout/">Log out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>                
+    </div>
+</div>       
+
+{% endblock %}
+
+{% block article %}
+<article id="vote">
+    <table class="table table-condensed">
+        {% for new in news %}
+        <tr>
+            <td>{{ forloop.counter }}. {{ new.hot }}</td>
+            <td>
+                <a href="javascript: avote({{ new.id }}, 'up', '{{ user }}')"><i class='icon-chevron-up'></i></a>   
+            </td>
+            <td>
+                {{ new.title }}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+            <a href="javascript: avote({{ new.id }}, 'down', '{{ user }}')"><i class="icon-chevron-down"></i></a>
+        </td>
+            <td>
+                <span class="muted">
+                    <small>{{ new.ups }} ups and {{ new.downs }} downs {{ new.pubtime }}</small>
+                </span> 
+            </td>
+        </tr> 
+        {% endfor %}
+    </table>   
+</article>
+
+{% endblock %}

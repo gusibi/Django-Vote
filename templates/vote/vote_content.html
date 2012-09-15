@@ -1,0 +1,27 @@
+<table class="table table-condensed">
+    {% for new in news %}
+    <tr>
+        <td>{{ forloop.counter }}. {{ new.hot }}</td>
+        <td>
+            <a href="javascript: avote({{ new.id }}, 'up', '{{ user }}')"><i class='icon-chevron-up'></i></a>   
+        </td>
+        <td>
+            {{ new.title }}
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <a href="javascript: avote({{ new.id }}, 'down', '{{ user }}')"><i class="icon-chevron-down"></i></a>
+        </td>
+        <td>
+            <span class="muted">
+                <small>{{ new.ups }} ups and {{ new.downs }} downs {{ new.pubtime }}</small>
+            </span> 
+        </td>
+    </tr> 
+    {% endfor %}
+</table>
+<p>{{ user }}</p>
+<p>{{ id }}</p>
+<p>{{ error }}</p>
